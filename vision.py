@@ -55,7 +55,3 @@ def get_unique_faces(path):
         raise ImageCount('Изображений слишком мало!')
 
     return faces
-
-
-# new_session(1, 1)
-delete_not_unique_faces('C:/Users/User/yandex1/lop', get_unique_faces('C:/Users/User/yandex1/lop'))
