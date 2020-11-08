@@ -13,7 +13,7 @@ import imagehash
 class ImageCount(Exception):
     pass
 
-
+# сравнение лиц с помощью хэш-сумм
 def compare_faces(img1, img2, dist=35):
     img1 = Image.open(img1)
     img2 = Image.open(img2)
@@ -25,6 +25,7 @@ def compare_faces(img1, img2, dist=35):
         return True
 
 
+# удаление неуникальных лиц
 def delete_not_unique_faces(path, faces):
     files = get_photos(path)
     for i in range(len(files)):
@@ -33,11 +34,14 @@ def delete_not_unique_faces(path, faces):
             os.remove(file)
 
 
+# получить список фото
 def get_photos(path):
-    return os.listdir(path)
+    files = os.listdir(path)
+    photos = [file for file in files if '.jpg' in file]
+    return photos
 
 
-# new_session(1, 2, 0)
+# получение списка уникальных лиц
 def get_unique_faces(path):
     try:
         files = get_photos(path)

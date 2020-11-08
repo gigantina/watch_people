@@ -11,7 +11,10 @@ from googletrans import Translator
 from profile import get_id
 from func import log_uncaught_exceptions
 
+sys.excepthook = log_uncaught_exceptions
 
+
+# генерация шуток с помощью API от Чака Норриса
 def generate_joke(name, surname=None):
     while True:
         try:
@@ -29,15 +32,14 @@ def generate_joke(name, surname=None):
     return res
 
 
+# машинный перевод шутки
 def translate_joke(joke):
     translator = Translator()
     res = translator.translate(joke, src='en', dest='ru')
     return res.text
 
 
-sys.excepthook = log_uncaught_exceptions
-
-
+# окно режима скрытности
 class Hidden_Window(QDialog):
     def __init__(self, password, parent):
         super().__init__(parent)
@@ -50,7 +52,7 @@ class Hidden_Window(QDialog):
     def closeEvent(self, event):
 
         reply = QMessageBox.question(self, 'Подтвердите действие', "Вы уверены, что хотите выйти",
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)  # Last param - focus
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
         if reply == QMessageBox.Yes:
             event.accept()
@@ -58,7 +60,6 @@ class Hidden_Window(QDialog):
             event.ignore()
 
     def run(self):
-
         text = str(self.lineEdit.text())
         if text != self.password:
             text = text.split()

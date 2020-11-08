@@ -30,10 +30,16 @@ class PasswordsNotMatch(Exception):
     pass
 
 
+class ShortLogin(Exception):
+    pass
+
+
+# получение уникального id
 def get_id():
     return randint(10000, 200000)
 
 
+# класс Профиля
 class Profile:
     def __init__(self, login, password, password_ok=None):
         self.login = login
@@ -52,6 +58,12 @@ class Profile:
         if flag:
             raise InvalidChars('Пароль должен содержать хотя бы одну цифру!')
 
+    def check_login(self):
+        if len(self.login) < 8:
+            raise ShortLogin('Пароль должен содержать хотя бы 3 символа!')
+        if not self.login.isalnum():
+            raise InvalidChars('Логин должен содержать только буквы и цифры!')
+
     def add_to_base(self):
         try:
             con = sqlite3.connect("base.sqlite")
@@ -66,6 +78,7 @@ class Profile:
             raise LoginAlreadyExists('Логин занят!')
 
 
+# класс сессии
 class Session:
     def __init__(self, id_session, id_profile):
         self.id_session = id_session
@@ -86,6 +99,7 @@ class Session:
             raise UnexpectedError('Непредвиденная ошибка')
 
 
+# получаем свсе сессии
 def get_all_sessions():
     res = ''
     try:
@@ -99,6 +113,7 @@ def get_all_sessions():
     return res
 
 
+# получение всех профилей
 def get_all_profiles():
     res = ''
     try:
@@ -112,6 +127,7 @@ def get_all_profiles():
     return res
 
 
+# авторизация
 def authorization(login, password):
     profiles = get_all_profiles()
     for profile in profiles:
@@ -123,6 +139,7 @@ def authorization(login, password):
     raise InvalidLogin('Неверный логин!')
 
 
+# смена пароля
 def change_password(login, password, new_password):
     if authorization(login, password):
         Profile(login, new_password).check_password()
@@ -138,6 +155,7 @@ def change_password(login, password, new_password):
             raise UnexpectedError('Непредвиденная ошибка')
 
 
+# получение информации о профиле по логину, паролю или id
 def get_profile(login=None, password=None, id=None):
     res = ''
     try:
@@ -157,6 +175,7 @@ def get_profile(login=None, password=None, id=None):
     return res
 
 
+# получение сессий по id профиля
 def get_sessions_from_profile(id_):
     res = ''
     try:
@@ -171,6 +190,7 @@ def get_sessions_from_profile(id_):
     return res
 
 
+# смена логина
 def change_login(login, new_login, password):
     if authorization(login, password):
         all_logins = [profile[1] for profile in get_all_profiles()]
@@ -189,6 +209,7 @@ def change_login(login, new_login, password):
             raise LoginAlreadyExists('Логин уже занят!')
 
 
+# удаление сессий по id профиля
 def del_sessions_from_id(id_):
     con = sqlite3.connect("base.sqlite")
     cur = con.cursor()
@@ -199,6 +220,7 @@ def del_sessions_from_id(id_):
     con.close()
 
 
+# очищение таблицы сессий
 def del_sessions():  # WARNING!!!!!!
     con = sqlite3.connect("base.sqlite")
     cur = con.cursor()
@@ -209,6 +231,7 @@ def del_sessions():  # WARNING!!!!!!
     con.close()
 
 
+# очищение таблицы профилей
 def del_profiles():  # WARNING!!!!!!
     con = sqlite3.connect("profiles.db")
     cur = con.cursor()

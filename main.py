@@ -12,6 +12,7 @@ from func import *
 sys.excepthook = log_uncaught_exceptions
 
 
+# основное окно, с входом и регистрацией
 class Main_Window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -27,20 +28,23 @@ class Main_Window(QMainWindow):
         login = self.lineEdit.text()
         password = self.lineEdit_2.text()
         try:
-            profile_id = authorization(login, password)
+            authorization(login, password)
+            self.sw = Session_Window(login)
+            self.sw.show()
+            self.close()
         except Exception as E:
             show_exception(E)
-        self.sw = Session_Window(login)
-        self.sw.show()
-        self.close()
 
     def registrate(self):
-        reg = QRegDialog()
-        login, password, password_ok = reg.get_res()
-        profile = Profile(login, password, password_ok)
         try:
+            reg = QRegDialog()
+            login, password, password_ok = reg.get_res()
+            profile = Profile(login, password, password_ok)
             profile.check_password()
+            profile.check_login()
             profile.add_to_base()
+        except TypeError:
+            pass
 
         except Exception as E:
             show_exception(E)

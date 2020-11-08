@@ -4,15 +4,14 @@ from PyQt5 import uic  # Импортируем uic
 from PyQt5.QtWidgets import *
 
 
+# диалог регистрации
 class QRegDialog(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('reg.ui', self)  # Загружаем дизайн
+        uic.loadUi('reg.ui', self)
         self.setWindowTitle('Регистрация')
         self.lineEdit_2.setEchoMode(QLineEdit.Password)
         self.lineEdit_3.setEchoMode(QLineEdit.Password)
-
-        # Обратите внимание: имя элемента такое же как в QTDesigner
 
     def get_res(self):
         if self.exec_() == QDialog.Accepted:
@@ -24,15 +23,14 @@ class QRegDialog(QDialog):
             return None
 
 
+# диалог смены пароля
 class ChangePasswordDialog(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('change.ui', self)  # Загружаем дизайн
+        uic.loadUi('change.ui', self)
         self.setWindowTitle('Смена пароля')
         self.lineEdit_2.setEchoMode(QLineEdit.Password)
         self.lineEdit_3.setEchoMode(QLineEdit.Password)
-
-        # Обратите внимание: имя элемента такое же как в QTDesigner
 
     def get_res(self):
         if self.exec_() == QDialog.Accepted:
@@ -42,11 +40,10 @@ class ChangePasswordDialog(QDialog):
             if login and password and password_new:
                 return login, password, password_new
             else:
-                return [None, None, None]
-        else:
-            return [None, None, None]
+                return None
 
 
+# диалог смены логина
 class ChangeLoginDialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -66,6 +63,7 @@ class ChangeLoginDialog(QDialog):
             return None
 
 
+# диалог для показа информации
 class Info(QDialog):
     def __init__(self, information):
         super().__init__()

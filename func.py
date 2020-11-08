@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 
+# показ ошибки в диалоговом окне
 def show_exception(E):
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Warning)
