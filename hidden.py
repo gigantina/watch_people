@@ -9,6 +9,7 @@ from PyQt5.QtCore import *
 import requests
 from googletrans import Translator
 from profile import get_id
+from func import *
 from func import log_uncaught_exceptions
 
 sys.excepthook = log_uncaught_exceptions
@@ -43,8 +44,10 @@ def translate_joke(joke):
 class Hidden_Window(QDialog):
     def __init__(self, password, parent):
         super().__init__(parent)
-        uic.loadUi('hidden.ui', self)
+        path = resource_path('hidden.ui')
+        uic.loadUi(path, self)
         self.setWindowTitle('Генератор шуток')
+        self.setFixedSize(self.size().width(), self.size().height())
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.password = password
         self.pushButton.clicked.connect(self.run)

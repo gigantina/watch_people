@@ -8,7 +8,7 @@ from func import *
 from dialogs import *
 import webbrowser
 from hidden import Hidden_Window
-from thread import CameraThread
+from camthread import CameraThread
 import csv
 from vision import *
 
@@ -24,24 +24,37 @@ class Session_Window(QMainWindow):
     def __init__(self, login):
         super().__init__()
         self.login = login
-        uic.loadUi('session.ui', self)  # Загружаем дизайн
+        path = resource_path('session.ui')
+        uic.loadUi(path, self)
         self.id_ = get_profile(self.login)[0][0]
         self.bin = ''
         self.setWindowTitle('Watch the poeople')
         self.isSession = False
         # menu
         self.action_Temp.triggered.connect(self.del_bin)
+        self.action_Temp.setShortcut('Ctrl+D')
+
         self.action_3.triggered.connect(self.change_password_event)
+        self.action_3.setShortcut('Ctrl+P')
+
         self.action_4.triggered.connect(self.change_login_event)
+        self.action_4.setShortcut('Ctrl+L')
+
         self.action_Github.triggered.connect(self.github)
+        self.action_Github.setShortcut('Ctrl+G')
+
         self.action_csv.triggered.connect(self.csv)
+        self.action_csv.setShortcut('Ctrl+S')
+
         self.actionFAQ.triggered.connect(self.faq)
+        self.actionFAQ.setShortcut('Ctrl+F')
         # buttons
         self.pushButton.setEnabled(False)
         self.pushButton.clicked.connect(self.hidden_mode)
         self.pushButton_2.clicked.connect(self.run)
         self.pushButton_3.clicked.connect(self.path_bin)
         self.pushButton_4.clicked.connect(self.del_base)
+
         self.show_the_table()
 
     def del_base(self):
@@ -77,23 +90,27 @@ class Session_Window(QMainWindow):
     def path_bin(self):
         fname = QFileDialog.getExistingDirectory(self,
                                                  'Выберите папку для временных файлов. После окончания сессии там останутся только уникальные лица')
-        self.bin = str(fname)
+        self.bin = resource_path(str(fname))
 
     def github(self):
         url = 'https://github.com/gigantina/watch_people'
         webbrowser.open_new(url)
 
     def csv(self):
-        fname = QFileDialog.getSaveFileName()[0]
+        fname = resource_path(QFileDialog.getSaveFileName()[0])
         data = [['session_id', 'Количество объектов в кадре', 'Время']]
         data += get_sessions_from_profile(self.id_)
-        with open(fname, "w", newline="") as file:
-            writer = csv.writer(file)
-            for i in data:
-                writer.writerow(list(i))
+        try:
+            with open(fname, "w", newline="") as file:
+                writer = csv.writer(file)
+                for i in data:
+                    writer.writerow(list(i))
+        except FileNotFoundError:
+            pass
 
     def faq(self):
-        print(1)
+        text = open('readme.txt', "r", encoding='utf-8').read()
+        self.faq = Info(text).show_message()
 
     def run(self):
         if self.isSession:

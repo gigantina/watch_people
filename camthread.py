@@ -38,7 +38,6 @@ class CameraThread(QThread):
                 time = now.strftime('%d.%m.%y--%H-%M-%S')
                 faces = fr.face_locations(img)
                 for face_location in faces:
-                    # Print the location of each face in this image
                     top, right, bottom, left = face_location
                     cropped = img[top:bottom, left:right]
                     file = self.path + '/' + time + '-' + str(randint(0, 100)) + '.jpg'

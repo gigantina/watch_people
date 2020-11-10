@@ -2,14 +2,17 @@ import sys
 
 from PyQt5 import uic  # Импортируем uic
 from PyQt5.QtWidgets import *
+from func import *
 
 
 # диалог регистрации
 class QRegDialog(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('reg.ui', self)
+        path = resource_path('reg.ui')
+        uic.loadUi(path, self)
         self.setWindowTitle('Регистрация')
+        self.setFixedSize(self.size().width(), self.size().height())
         self.lineEdit_2.setEchoMode(QLineEdit.Password)
         self.lineEdit_3.setEchoMode(QLineEdit.Password)
 
@@ -27,8 +30,15 @@ class QRegDialog(QDialog):
 class ChangePasswordDialog(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('change.ui', self)
+        path = resource_path('reg.ui')
+        uic.loadUi(path, self)
         self.setWindowTitle('Смена пароля')
+
+        self.label.setText('Логин')
+        self.label_2.setText('Пароль')
+        self.label_3.setText('Новый пароль')
+
+        self.setFixedSize(self.size().width(), self.size().height())
         self.lineEdit_2.setEchoMode(QLineEdit.Password)
         self.lineEdit_3.setEchoMode(QLineEdit.Password)
 
@@ -47,10 +57,15 @@ class ChangePasswordDialog(QDialog):
 class ChangeLoginDialog(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('change.ui', self)  # Загружаем дизайн
+        path = resource_path('reg.ui')
+        uic.loadUi(path, self)
+        self.setFixedSize(self.size().width(), self.size().height())
         self.setWindowTitle('Смена логина')
+
+        self.label.setText('Логин')
         self.label_2.setText('Новый логин')
         self.label_3.setText('Пароль')
+
         self.lineEdit_3.setEchoMode(QLineEdit.Password)
 
     def get_res(self):
@@ -67,7 +82,9 @@ class ChangeLoginDialog(QDialog):
 class Info(QDialog):
     def __init__(self, information):
         super().__init__()
-        uic.loadUi('info.ui', self)
+        path = resource_path('info.ui')
+        uic.loadUi(path, self)
+        self.setFixedSize(self.size().width(), self.size().height())
         self.info = information
         self.setWindowTitle('Информация')
         self.textEdit.setText(self.info)

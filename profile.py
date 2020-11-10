@@ -1,5 +1,6 @@
 import sqlite3
 from random import randint
+from func import *
 
 
 class LoginAlreadyExists(Exception):
@@ -66,7 +67,8 @@ class Profile:
 
     def add_to_base(self):
         try:
-            con = sqlite3.connect("base.sqlite")
+            path = resource_path('base.sqlite')
+            con = sqlite3.connect(path)
             cur = con.cursor()
 
             # Выполнение запроса и получение всех результатов
@@ -87,7 +89,8 @@ class Session:
     def add_to_base(self, time, num=1):
 
         try:
-            con = sqlite3.connect("base.sqlite")
+            path = resource_path('base.sqlite')
+            con = sqlite3.connect(path)
             cur = con.cursor()
 
             cur.execute('''INSERT INTO sessions VALUES (?, ?, ?, ?) ''',
@@ -103,7 +106,8 @@ class Session:
 def get_all_sessions():
     res = ''
     try:
-        con = sqlite3.connect("base.sqlite")
+        path = resource_path('base.sqlite')
+        con = sqlite3.connect(path)
         cur = con.cursor()
 
         cur.execute('''SELECT * FROM sessions''')
@@ -117,7 +121,8 @@ def get_all_sessions():
 def get_all_profiles():
     res = ''
     try:
-        con = sqlite3.connect("base.sqlite")
+        path = resource_path('base.sqlite')
+        con = sqlite3.connect(path)
         cur = con.cursor()
 
         cur.execute('''SELECT * FROM profile''')
@@ -144,7 +149,8 @@ def change_password(login, password, new_password):
     if authorization(login, password):
         Profile(login, new_password).check_password()
         try:
-            con = sqlite3.connect("base.sqlite")
+            path = resource_path('base.sqlite')
+            con = sqlite3.connect(path)
             cur = con.cursor()
 
             cur.execute(f'UPDATE profile SET password = ? WHERE login = ?', (new_password, login))
@@ -159,7 +165,8 @@ def change_password(login, password, new_password):
 def get_profile(login=None, password=None, id=None):
     res = ''
     try:
-        con = sqlite3.connect("base.sqlite")
+        path = resource_path('base.sqlite')
+        con = sqlite3.connect(path)
         cur = con.cursor()
         if login:
             cur.execute(f'SELECT * FROM profile WHERE login="{login}"')
@@ -179,7 +186,8 @@ def get_profile(login=None, password=None, id=None):
 def get_sessions_from_profile(id_):
     res = ''
     try:
-        con = sqlite3.connect("base.sqlite")
+        path = resource_path('base.sqlite')
+        con = sqlite3.connect(path)
         cur = con.cursor()
 
         cur.execute(f'''SELECT session_id, num_of_obj, time FROM sessions WHERE id_profile={id_}''')
@@ -196,7 +204,8 @@ def change_login(login, new_login, password):
         all_logins = [profile[1] for profile in get_all_profiles()]
         if new_login not in all_logins:
             try:
-                con = sqlite3.connect("base.sqlite")
+                path = resource_path('base.sqlite')
+                con = sqlite3.connect(path)
                 cur = con.cursor()
 
                 cur.execute(f'UPDATE profile SET login = ? WHERE login = ?', (new_login, login))
@@ -211,7 +220,8 @@ def change_login(login, new_login, password):
 
 # удаление сессий по id профиля
 def del_sessions_from_id(id_):
-    con = sqlite3.connect("base.sqlite")
+    path = resource_path('base.sqlite')
+    con = sqlite3.connect(path)
     cur = con.cursor()
 
     cur.execute(f'DELETE FROM sessions WHERE id_profile = {id_}')
@@ -222,7 +232,8 @@ def del_sessions_from_id(id_):
 
 # очищение таблицы сессий
 def del_sessions():  # WARNING!!!!!!
-    con = sqlite3.connect("base.sqlite")
+    path = resource_path('base.sqlite')
+    con = sqlite3.connect(path)
     cur = con.cursor()
 
     cur.execute('DELETE FROM sessions')
@@ -233,7 +244,8 @@ def del_sessions():  # WARNING!!!!!!
 
 # очищение таблицы профилей
 def del_profiles():  # WARNING!!!!!!
-    con = sqlite3.connect("profiles.db")
+    path = resource_path('base.sqlite')
+    con = sqlite3.connect(path)
     cur = con.cursor()
 
     cur.execute('DELETE FROM profile')
